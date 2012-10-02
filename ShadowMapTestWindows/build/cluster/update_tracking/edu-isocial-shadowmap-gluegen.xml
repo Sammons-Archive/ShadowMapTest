@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="edu.isocial.shadowmap.gluegen">
+    <module_version install_time="1349059986094" last="true" origin="installer" specification_version="1.0">
+        <file crc="3101174769" name="config/Modules/edu-isocial-shadowmap-gluegen.xml"/>
+        <file crc="845417127" name="modules/edu-isocial-shadowmap-gluegen.jar"/>
+        <file crc="231461169" name="modules/ext/gluegen-rt.jar"/>
+        <file crc="277554304" name="modules/lib/gluegen-rt.dll"/>
+        <file crc="1494902120" name="modules/lib/jogl.dll"/>
+        <file crc="2233592965" name="modules/lib/jogl_awt.dll"/>
+        <file crc="3276286261" name="modules/lib/jogl_cg.dll"/>
+        <file crc="2296162085" name="modules/lib/libEscher.so"/>
+        <file crc="1291814216" name="modules/lib/libgluegen-rt.jnilib"/>
+        <file crc="2183431037" name="modules/lib/libgluegen-rt.so"/>
+        <file crc="3272036687" name="modules/lib/libjogl.jnilib"/>
+        <file crc="1837820204" name="modules/lib/libjogl.so"/>
+        <file crc="1232734016" name="modules/lib/libjogl_awt.jnilib"/>
+        <file crc="699388215" name="modules/lib/libjogl_awt.so"/>
+        <file crc="988407254" name="modules/lib/libjogl_cg.jnilib"/>
+        <file crc="4053132620" name="modules/lib/libjogl_cg.so"/>
+        <file crc="2272436698" name="modules/lib/openal.dylib"/>
+    </module_version>
+</module>
