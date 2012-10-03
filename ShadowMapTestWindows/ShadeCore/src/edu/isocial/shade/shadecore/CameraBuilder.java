@@ -35,23 +35,24 @@ public class CameraBuilder {
     private AWTInputComponent selectionListener;
     private ProcessorCollectionComponent processorCollectionComp;
 
-    public CameraBuilder(WorldManager worldManager, RenderBuffer renderBuffer, int width, int height, float aspectRatio) {
-        initialize(worldManager, renderBuffer, width, height, aspectRatio);
+    public CameraBuilder(WorldManager worldManager, float aspectRatio) {
+        initialize(worldManager, aspectRatio);
     }
 
-    private void initialize(WorldManager worldManager, RenderBuffer renderBuffer, int width, int height, float aspectRatio) {
+    private void initialize(WorldManager worldManager, float aspectRatio) {
         this.worldManager = worldManager;
-        this.renderBuffer = renderBuffer;
         this.aspectRatio = aspectRatio;
-        this.width = width;
-        this.height = height;
+
     }
 
     public void buildCamera(CanvasBuilder content) {
+        this.width = content.getRenderingCanvas().getWidth();
+        this.height = content.getRenderingCanvas().getHeight();
+        this.renderBuffer = content.getRenderBuffer();
         cameraSG = createCameraGraph();
         camera = new Entity("Default Camera");
         cameraComponent = worldManager.getRenderManager().createCameraComponent(cameraSG, cameraNode, width, height, 45.0f, aspectRatio, 1.0f, 1000.0f, true);
-        renderBuffer.setCameraComponent(cameraComponent);
+        content.getRenderBuffer().setCameraComponent(cameraComponent);
         camera.addComponent(CameraComponent.class, cameraComponent);
         eventMask = InputManager.KEY_EVENTS | InputManager.MOUSE_EVENTS;
         cameraListener = (AWTInputComponent) worldManager.getInputManager().createInputComponent(content.getRenderingCanvas(), eventMask);
@@ -70,7 +71,7 @@ public class CameraBuilder {
     }
 
     private Node createCameraGraph() {
-        Node cameraSG = new Node("MyCamera SG");
+        cameraSG = new Node("MyCamera SG");
         cameraNode = new CameraNode("MyCamera", null);
         cameraSG.attachChild(cameraNode);
         return (cameraSG);

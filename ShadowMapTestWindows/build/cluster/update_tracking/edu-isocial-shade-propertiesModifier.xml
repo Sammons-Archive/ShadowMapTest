@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="edu.isocial.shade.propertiesModifier">
+    <module_version install_time="1349245049561" last="true" origin="installer" specification_version="1.0">
+        <file crc="1192668895" name="config/Modules/edu-isocial-shade-propertiesModifier.xml"/>
+        <file crc="1469501025" name="modules/edu-isocial-shade-propertiesModifier.jar"/>
+    </module_version>
+</module>

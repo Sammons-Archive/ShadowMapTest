@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="edu.isocial.shadowmap.mtgamejars">
-    <module_version install_time="1349059986835" last="true" origin="installer" specification_version="1.0">
+    <module_version install_time="1349245044758" last="true" origin="installer" specification_version="1.0">
         <file crc="1334056866" name="config/Modules/edu-isocial-shadowmap-mtgamejars.xml"/>
-        <file crc="2888215478" name="modules/edu-isocial-shadowmap-mtgamejars.jar"/>
+        <file crc="894955094" name="modules/edu-isocial-shadowmap-mtgamejars.jar"/>
         <file crc="490766669" name="modules/ext/javolution.jar"/>
         <file crc="3842209556" name="modules/ext/jbullet.jar"/>
         <file crc="2117958712" name="modules/ext/jme-audio.jar"/>

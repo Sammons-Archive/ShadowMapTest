@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="edu.isocial.shadowmap.gluegen">
-    <module_version install_time="1349059986094" last="true" origin="installer" specification_version="1.0">
+    <module_version install_time="1349245043688" last="true" origin="installer" specification_version="1.0">
         <file crc="3101174769" name="config/Modules/edu-isocial-shadowmap-gluegen.xml"/>
-        <file crc="845417127" name="modules/edu-isocial-shadowmap-gluegen.jar"/>
+        <file crc="2429240444" name="modules/edu-isocial-shadowmap-gluegen.jar"/>
         <file crc="231461169" name="modules/ext/gluegen-rt.jar"/>
         <file crc="277554304" name="modules/lib/gluegen-rt.dll"/>
         <file crc="1494902120" name="modules/lib/jogl.dll"/>

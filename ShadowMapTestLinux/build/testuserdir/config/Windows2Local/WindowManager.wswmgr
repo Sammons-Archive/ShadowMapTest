@@ -4,9 +4,9 @@
     <main-window>
   <joined-properties
    x="96"
-   y="109"
+   y="106"
    width="1728"
-   height="981"
+   height="987"
    relative-x="0.0"
    relative-y="0.0"
    relative-width="0.0"
@@ -37,7 +37,7 @@
   <path orientation="vertical" number="40" weight="0.7" />
   <path orientation="horizontal" number="40" weight="0.7" />
   </constraints>
-  <bounds x="633" y="261" width="806" height="479" />
+  <bounds x="633" y="263" width="806" height="482" />
     </editor-area>
     <screen width="1920" height="1200"/>
     <active-mode name="editor"/>

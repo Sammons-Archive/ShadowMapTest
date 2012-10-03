@@ -4,60 +4,60 @@
  */
 package edu.isocial.shade.shadecore;
 
-import java.awt.AWTEvent;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import javax.swing.Action;
 import javax.swing.JPanel;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
-import org.jdesktop.mtgame.FrameRateListener;
+import org.jdesktop.mtgame.RenderBuffer;
+import org.jdesktop.mtgame.RenderUpdater;
+import org.jdesktop.mtgame.ShadowMapRenderBuffer;
+import org.jdesktop.mtgame.WorldManager;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
+// Variables declaration - do not modify
 /**
  * Top component which displays something.
  */
-@ConvertAsProperties(
-    dtd = "-//edu.isocial.shade.shadecore//Main//EN",
+@ConvertAsProperties(dtd = "-//edu.isocial.shade.shadecore//Main//EN",
 autostore = false)
-@TopComponent.Description(
-    preferredID = "MainTopComponent",
+@TopComponent.Description(preferredID = "MainTopComponent",
 //iconBase="SET/PATH/TO/ICON/HERE", 
 persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "editor", openAtStartup = true)
 @ActionID(category = "Window", id = "edu.isocial.shade.shadecore.MainTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-    displayName = "#CTL_MainAction",
+@ActionReference(path = "Menu/Window" /*
+ * , position = 333
+ */)
+@TopComponent.OpenActionRegistration(displayName = "#CTL_MainAction",
 preferredID = "MainTopComponent")
 @Messages({
     "CTL_MainAction=Main",
     "CTL_MainTopComponent=Main Window",
     "HINT_MainTopComponent=This is a Main window"
 })
-public final class MainTopComponent extends TopComponent {
+public final class MainTopComponent extends TopComponent implements RenderUpdater {
 
-    private ShadowMapCore shadowMapper;
+    private WorldManager worldManager;
+    private int width = 800;
+    private int height = 600;
+    private float aspect = 800.0f / 600.0f;
+    private int gridWidth = 250;
+    private ShadowMapRenderBuffer shadow;
+    private CanvasBuilder canvasBuilder = null;
+    private CameraBuilder cameraBuilder;
+    private GridBuilder gridBuilder;
+    private Axis axis;
+    private LightBuilder light;
+    private TeapotBuilder teapotBuilder;
+    private FloorBuilder floorBuilder;
 
     public MainTopComponent() {
         initComponents();
         setName(Bundle.CTL_MainTopComponent());
         setToolTipText(Bundle.HINT_MainTopComponent());
 
-        //note that there is a JPanel already declared below through the designer
-        //the renderingCanvas is being added directly to the mainPane
-        shadowMapper = new ShadowMapCore(mainPane);
-        System.out.println(this.listenerList.getListenerCount());
-
-
+        construct();
     }
 
     /**
@@ -69,7 +69,6 @@ public final class MainTopComponent extends TopComponent {
     private void initComponents() {
 
         mainPane = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1000, 600));
 
@@ -84,49 +83,104 @@ public final class MainTopComponent extends TopComponent {
             .addGap(0, 600, Short.MAX_VALUE)
         );
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(MainTopComponent.class, "MainTopComponent.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
-                .addComponent(jButton1))
+                .addContainerGap(319, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(mainPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1)
-                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        shadowMapper.kill(mainPane);
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JPanel mainPane;
     // End of variables declaration//GEN-END:variables
 
+    private void construct() {
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                initialize();
+            }
+        }).start();
+    }
+
+    private void initialize() {
+        worldManager = new WorldManager("TestWorld");
+        worldManager.getRenderManager().setDesiredFrameRate(60);
+
+        canvasBuilder = new CanvasBuilder(worldManager, width, height);
+        canvasBuilder.buildCanvas(mainPane);
+
+        cameraBuilder = new CameraBuilder(worldManager, aspect);
+        cameraBuilder.buildCamera(canvasBuilder);
+
+        gridBuilder = new GridBuilder(worldManager, gridWidth);
+        worldManager.addEntity(gridBuilder.getGrid());
+
+        axis = new Axis(worldManager);
+        worldManager.addEntity(axis.getAxis());
+
+        light = new LightBuilder(worldManager);
+        shadow = light.getShadow();
+
+        teapotBuilder = new TeapotBuilder(shadow, this);
+        teapotBuilder.buildTeapot(worldManager,0,0,0);
+
+        floorBuilder = new FloorBuilder();
+        floorBuilder.createFloor(worldManager, shadow);
+    }
+
+    public Axis getAxis() {
+        return axis;
+    }
+
+    public CameraBuilder getCameraBuilder() {
+        return cameraBuilder;
+    }
+
+    public CanvasBuilder getCanvasBuilder() {
+        return canvasBuilder;
+    }
+
+    public FloorBuilder getFloorBuilder() {
+        return floorBuilder;
+    }
+
+    public GridBuilder getGridBuilder() {
+        return gridBuilder;
+    }
+
+    public LightBuilder getLight() {
+        return light;
+    }
+
+    public JPanel getMainPane() {
+        return mainPane;
+    }
+
+    public TeapotBuilder getTeapotBuilder() {
+        return teapotBuilder;
+    }
+
+    public WorldManager getWorldManager() {
+        return worldManager;
+    }
+
+    
+    
     @Override
     public void componentOpened() {
     }
 
     @Override
     public void componentClosed() {
-        // TODO add custom code on component closing
-        shadowMapper.kill(mainPane);
     }
 
     void writeProperties(java.util.Properties p) {
@@ -138,6 +192,10 @@ public final class MainTopComponent extends TopComponent {
 
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
-        // TODO read your settings according to their version
+    }
+
+    @Override
+    public void update(Object object) {
+        shadow = (ShadowMapRenderBuffer) object;
     }
 }

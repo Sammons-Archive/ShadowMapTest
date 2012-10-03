@@ -10,6 +10,7 @@ import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Node;
 import com.jme.scene.Spatial;
 import com.jme.scene.shape.Teapot;
+import com.jme.scene.shape.*;
 import com.jme.scene.state.CullState;
 import com.jme.scene.state.MaterialState;
 import com.jme.scene.state.RenderState;
@@ -31,12 +32,15 @@ import org.jdesktop.mtgame.processor.RotationProcessor;
  */
 public class TeapotBuilder {
 
-    private Entity teapotEntity;
+    private Entity shape;
     private Node node;
     private ShadowMapRenderBuffer shadow;
     private RenderUpdater renderUpdater;
-    private ColorRGBA teapotColor = null;
+    private ColorRGBA teapotColor = new ColorRGBA();
     private float teapotCreationCoordX = 0, teapotCreationCoordY = 0, teapotCreationCoordZ = 0;
+    private MaterialState matState;
+    private RenderComponent renderComponent;
+    private boolean spinState = false;
 
     public TeapotBuilder(ShadowMapRenderBuffer shadow, RenderUpdater renderUpdater) {
         this.shadow = shadow;
@@ -45,55 +49,10 @@ public class TeapotBuilder {
 
     public void buildTeapot(WorldManager worldManager, float coordX, float coordY, float coordZ) {
         teapotInitializer(worldManager, teapotColor, coordX, coordY, coordZ);
-        worldManager.addEntity(teapotEntity);
+        worldManager.addEntity(shape);
     }
 
-    public void buildRotatingTeapot(WorldManager worldManager, float coordX, float coordY, float coordZ) {
-        teapotInitializer(worldManager, teapotColor, coordX, coordY, coordZ);
-        RotationProcessor rp = new RotationProcessor("Teapot Rotator", worldManager,
-                node, (float) (6.0f * Math.PI / 180.0f));
-        teapotEntity.addComponent(ProcessorComponent.class, rp);
-        worldManager.addEntity(teapotEntity);
-    }
-
-    public void buildTeapot(WorldManager worldManager) {
-        teapotInitializer(worldManager, teapotColor, teapotCreationCoordX, teapotCreationCoordY, teapotCreationCoordZ);
-        worldManager.addEntity(teapotEntity);
-    }
-
-    public void buildRotatingTeapot(WorldManager worldManager) {
-        teapotInitializer(worldManager, teapotColor, teapotCreationCoordX, teapotCreationCoordY, teapotCreationCoordZ);
-        RotationProcessor rp = new RotationProcessor("Teapot Rotator", WorldManager.getDefaultWorldManager(),
-                node, (float) (6.0f * Math.PI / 180.0f));
-        teapotEntity.addComponent(ProcessorComponent.class, rp);
-        worldManager.addEntity(teapotEntity);
-    }
-
-    public void buildTeapot(WorldManager worldManager, ColorRGBA colorRGBA) {
-        teapotInitializer(worldManager, colorRGBA, teapotCreationCoordX, teapotCreationCoordY, teapotCreationCoordZ);
-        worldManager.addEntity(teapotEntity);
-    }
-
-    public void buildRotatingTeapot(WorldManager worldManager, ColorRGBA colorRGBA) {
-        teapotInitializer(worldManager, colorRGBA, teapotCreationCoordX, teapotCreationCoordY, teapotCreationCoordZ);
-        RotationProcessor rp = new RotationProcessor("Teapot Rotator", WorldManager.getDefaultWorldManager(),
-                node, (float) (6.0f * Math.PI / 180.0f));
-        teapotEntity.addComponent(ProcessorComponent.class, rp);
-        worldManager.addEntity(teapotEntity);
-    }
-
-    public void buildTeapot(WorldManager worldManager, ColorRGBA colorRGBA, float coordX, float coordY, float coordZ) {
-        teapotInitializer(worldManager, colorRGBA, coordX, coordY, coordZ);
-        worldManager.addEntity(teapotEntity);
-    }
-
-    public void buildRotatingTeapot(WorldManager worldManager, ColorRGBA colorRGBA, float coordX, float coordY, float coordZ) {
-        teapotInitializer(worldManager, colorRGBA, coordX, coordY, coordZ);
-        RotationProcessor rp = new RotationProcessor("Teapot Rotator", WorldManager.getDefaultWorldManager(),
-                node, (float) (6.0f * Math.PI / 180.0f));
-        teapotEntity.addComponent(ProcessorComponent.class, rp);
-        worldManager.addEntity(teapotEntity);
-    }
+    
 
     private void teapotInitializer(WorldManager worldManager, ColorRGBA colorRGBA, float posx, float posy, float posz) {
         node = new Node();
@@ -110,7 +69,6 @@ public class TeapotBuilder {
         bbox.computeFromTris(teapot.getMeshAsTriangles(tris), 0, tris.length);
 
         //make the teapot a specific color
-        MaterialState matState;
         if (colorRGBA != null) {
             matState = (MaterialState) worldManager.getRenderManager().createRendererState(RenderState.StateType.Material);
             matState.setDiffuse(colorRGBA);
@@ -133,12 +91,59 @@ public class TeapotBuilder {
         teapot.setModelBound(bbox);
         teapot.setCullHint(Spatial.CullHint.Never);
 
-        teapotEntity = new Entity("Teapot");
-        RenderComponent sc = worldManager.getRenderManager().createRenderComponent(node);
-        teapotEntity.addComponent(RenderComponent.class, sc);
-        
+        shape = new Entity("Entity Teapot: " + worldManager.numEntities());
+        renderComponent = worldManager.getRenderManager().createRenderComponent(node);
+        shape.addComponent(RenderComponent.class, renderComponent);
 
-        shadow.addRenderScene(sc);
+
+        shadow.addRenderScene(renderComponent);
         shadow.setRenderUpdater(renderUpdater);
+    }
+
+    public void setTeapotColor(WorldManager worldManager, ColorRGBA colorRGBA) {
+        //the number the item is in the worldManager is in its name as string, i pull it out here and grab the item
+        int index = (char) shape.getName().indexOf(":");
+        int numInWorldManager = Integer.valueOf(shape.getName().substring(index + 1).replaceAll(" ", ""));
+
+        shadow.removeRenderScene(worldManager.getEntity(numInWorldManager).getComponent(RenderComponent.class));
+
+        matState = (MaterialState) worldManager.getRenderManager().createRendererState(RenderState.StateType.Material);
+        matState.setDiffuse(colorRGBA);
+
+        worldManager.getEntity(numInWorldManager).removeComponent(RenderComponent.class);
+        node.setRenderState(matState);
+        renderComponent = worldManager.getRenderManager().createRenderComponent(node);
+        worldManager.getEntity(numInWorldManager).addComponent(RenderComponent.class, renderComponent);
+
+        shadow.addRenderScene(renderComponent);
+
+    }
+
+    public void setTeapotSpin(WorldManager worldManager, boolean spinState) {
+        this.spinState = spinState;
+        int index = (char) shape.getName().indexOf(":");
+        int numInWorldManager = Integer.valueOf(shape.getName().substring(index + 1).replaceAll(" ", ""));
+        if (spinState) {
+            worldManager.getEntity(numInWorldManager).removeComponent(ProcessorComponent.class);
+            RotationProcessor rotationProcessor = new RotationProcessor("Rotator for Entity:" + "numInWordManager", WorldManager.getDefaultWorldManager(),
+                    node, (float) (6.0f * Math.PI / 180.0f));
+            worldManager.getEntity(numInWorldManager).addComponent(ProcessorComponent.class, rotationProcessor);
+        } else {
+            worldManager.getEntity(numInWorldManager).removeComponent(ProcessorComponent.class);
+        }
+    }
+    
+
+    public void setTeapotLocation(WorldManager worldManager, float x, float y, float z) {
+        //the number the item is in the worldManager is in its name as string, i pull it out here and grab the item
+        int index = (char) shape.getName().indexOf(":");
+        int numInWorldManager = Integer.valueOf(shape.getName().substring(index + 1).replaceAll(" ", ""));
+        shadow.removeRenderScene(worldManager.getEntity(numInWorldManager).getComponent(RenderComponent.class));
+        worldManager.getEntity(numInWorldManager).removeComponent(RenderComponent.class);
+        node.setLocalTranslation(x, y, z);
+        //node.setLocalTranslation(posx, posy, posz);
+        renderComponent = worldManager.getRenderManager().createRenderComponent(node);
+        worldManager.getEntity(numInWorldManager).addComponent(RenderComponent.class, renderComponent);
+        shadow.addRenderScene(renderComponent);
     }
 }
