@@ -1,0 +1,7 @@
+C:\Program Files (x86)\NetBeans 7.1.2\platform=1345500048654
+C:\Users\Ben\Desktop\Dropbox\ShadowMapTest\ShadowMapTestWindows\build\cluster=1349859753563
+C:\Program Files (x86)\NetBeans 7.1.2\platform=1345500048654
+C:\Users\Ben\Desktop\Dropbox\ShadowMapTest\ShadowMapTestWindows\build\testuserdir=1349859753563
+crc=7
+locale=en_US
+branding=shadowmaptestben

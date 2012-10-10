@@ -21,19 +21,15 @@ public class CanvasBuilder implements FrameRateListener {
 
     private Canvas renderingCanvas;
     private RenderBuffer renderBuffer;
-    private WorldManager worldManager;
-    private int width, height;
+    private int width = 800, height = 600;
     private JLabel fpsLabel;
 
-    public CanvasBuilder(WorldManager worldManager, int width, int height) {
-        this.worldManager = worldManager;
-        this.width = width;
-        this.height = height;
+    public CanvasBuilder() {
     }
 
-    public void buildCanvas(JPanel pane) {
+    public void buildCanvas(JPanel pane, WorldManager worldManager) {
         //prepare fpsLabel
-        prepareFPSLabel();
+        prepareFPSLabel(worldManager);
         pane.add(fpsLabel);
 
         //prepareCanvas
@@ -46,10 +42,10 @@ public class CanvasBuilder implements FrameRateListener {
 
     }
 
-    private void prepareFPSLabel() {
+    private void prepareFPSLabel(WorldManager worldManager) {
         fpsLabel = new JLabel();
         fpsLabel.setSize(125, 25);
-        fpsLabel.setLocation(width - 125, height-25);
+        fpsLabel.setLocation(width - 125, height - 25);
         fpsLabel.setOpaque(true);
         fpsLabel.setBackground(Color.BLACK);
         fpsLabel.setForeground(Color.WHITE);
@@ -69,7 +65,6 @@ public class CanvasBuilder implements FrameRateListener {
         fpsLabel.setText("FPS: " + f);
 
     }
-
 //    public void kill(JPanel mainPane, WorldManager worldManager) {
 //        worldManager.getRenderManager().setRunning(false);
 ////        mainPane.remove(renderingCanvas);

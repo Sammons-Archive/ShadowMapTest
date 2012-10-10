@@ -16,26 +16,39 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="btnToggleCanvas" alignment="0" min="-2" max="-2" attributes="0"/>
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="btnGridToggle" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-              <Component id="btnAxisToggle" min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Component id="btnToggleSpin2" alignment="0" min="-2" max="-2" attributes="0"/>
-          <Component id="btnColor" alignment="0" min="-2" max="-2" attributes="0"/>
-          <Component id="comboColors" alignment="0" min="-2" pref="93" max="-2" attributes="0"/>
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="btnUpdateLight" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-              <Component id="btnToggleLightSpin" min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="textLightX" min="-2" pref="83" max="-2" attributes="0"/>
-              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-              <Component id="textLightY" min="-2" pref="83" max="-2" attributes="0"/>
-              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-              <Component id="textLightZ" min="-2" pref="83" max="-2" attributes="0"/>
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="btnToggleCanvas" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="btnGridToggle" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                      <Component id="btnAxisToggle" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="btnToggleObjectSpin" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnColor" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="comboColors" alignment="0" min="-2" pref="93" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="textLightX" min="-2" pref="83" max="-2" attributes="0"/>
+                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                      <Component id="textLightY" min="-2" pref="83" max="-2" attributes="0"/>
+                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                      <Component id="textLightZ" min="-2" pref="83" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="btnUpdateLight" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                      <Component id="btnToggleLightSpin" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="ObjectX" min="-2" pref="84" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="ObjectY" min="-2" pref="80" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="ObjectZ" min="-2" pref="75" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="btnObjectLocation" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -49,10 +62,18 @@
                   <Component id="btnAxisToggle" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-              <Component id="btnToggleSpin2" min="-2" max="-2" attributes="0"/>
+              <Component id="btnToggleObjectSpin" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
               <Component id="btnColor" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+              <EmptySpace pref="21" max="32767" attributes="0"/>
+              <Component id="btnObjectLocation" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="ObjectX" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ObjectY" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ObjectZ" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
               <Component id="comboColors" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="11" pref="11" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -65,6 +86,7 @@
                   <Component id="textLightY" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="textLightZ" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -84,14 +106,14 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="btnToggleSpin2">
+    <Component class="javax.swing.JButton" name="btnToggleObjectSpin">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="edu/isocial/shade/shadecore/Bundle.properties" key="PropertiesTopComponent.btnToggleSpin2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="edu/isocial/shade/shadecore/Bundle.properties" key="PropertiesTopComponent.btnToggleObjectSpin.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnToggleSpin2ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnToggleObjectSpinActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnToggleCanvas">
@@ -166,6 +188,37 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnToggleLightSpinActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="ObjectX">
+      <Properties>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="edu/isocial/shade/shadecore/Bundle.properties" key="PropertiesTopComponent.ObjectX.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="ObjectY">
+      <Properties>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="edu/isocial/shade/shadecore/Bundle.properties" key="PropertiesTopComponent.ObjectY.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="ObjectZ">
+      <Properties>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="edu/isocial/shade/shadecore/Bundle.properties" key="PropertiesTopComponent.ObjectZ.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnObjectLocation">
+      <Properties>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="edu/isocial/shade/shadecore/Bundle.properties" key="PropertiesTopComponent.btnObjectLocation.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnObjectLocationActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

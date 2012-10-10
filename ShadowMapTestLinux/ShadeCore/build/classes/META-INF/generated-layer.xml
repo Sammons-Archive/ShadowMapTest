@@ -9,6 +9,10 @@
                     <!--edu.isocial.shade.shadecore.MainTopComponent-->
                     <attr name="hint.originalPublicID" stringvalue="-//edu.isocial.shade.shadecore//Main//EN"/>
                 </file>
+                <file name="Properties" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--edu.isocial.shade.shadecore.PropertiesTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//edu.isocial.shade.shadecore//Properties//EN"/>
+                </file>
             </folder>
         </folder>
         <folder name="memory">
@@ -19,6 +23,10 @@
                             <file name="MainTopComponent">
                                 <!--edu.isocial.shade.shadecore.MainTopComponent-->
                                 <attr name="settings.providerPath" stringvalue="xml/lookups//edu_isocial_shade_shadecore/Main.instance"/>
+                            </file>
+                            <file name="PropertiesTopComponent">
+                                <!--edu.isocial.shade.shadecore.PropertiesTopComponent-->
+                                <attr name="settings.providerPath" stringvalue="xml/lookups//edu_isocial_shade_shadecore/Properties.instance"/>
                             </file>
                         </folder>
                     </folder>
@@ -37,6 +45,16 @@
                     <attr name="settings.instanceOf" stringvalue="edu.isocial.shade.shadecore.MainTopComponent"/>
                     <attr boolvalue="true" name="xmlproperties.preventStoring"/>
                 </file>
+                <file name="Properties.instance">
+                    <!--edu.isocial.shade.shadecore.PropertiesTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="edu.isocial.shade.shadecore.PropertiesTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="edu.isocial.shade.shadecore.PropertiesTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
             </folder>
         </folder>
     </folder>
@@ -45,6 +63,10 @@
             <file name="edu-isocial-shade-shadecore-MainTopComponent.shadow">
                 <!--edu.isocial.shade.shadecore.MainTopComponent-->
                 <attr name="originalFile" stringvalue="Actions/Window/edu-isocial-shade-shadecore-MainTopComponent.instance"/>
+            </file>
+            <file name="edu-isocial-shade-shadecore-PropertiesTopComponent.shadow">
+                <!--edu.isocial.shade.shadecore.PropertiesTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/Window/edu-isocial-shade-shadecore-PropertiesTopComponent.instance"/>
             </file>
         </folder>
     </folder>
@@ -57,6 +79,13 @@
   <instance class="edu.isocial.shade.shadecore.MainTopComponent"/>
 </settings>
 ]]></file>
+            <file name="PropertiesTopComponent.settings">
+                <!--edu.isocial.shade.shadecore.PropertiesTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
+<settings version="1.0">
+  <instance class="edu.isocial.shade.shadecore.PropertiesTopComponent"/>
+</settings>
+]]></file>
         </folder>
         <folder name="Modes">
             <folder name="editor">
@@ -65,6 +94,16 @@
 <!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
 <tc-ref version="2.0">
   <tc-id id="MainTopComponent"/>
+  <state opened="true"/>
+</tc-ref>
+]]></file>
+            </folder>
+            <folder name="properties">
+                <file name="PropertiesTopComponent.wstcref">
+                    <!--edu.isocial.shade.shadecore.PropertiesTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
+<tc-ref version="2.0">
+  <tc-id id="PropertiesTopComponent"/>
   <state opened="true"/>
 </tc-ref>
 ]]></file>
@@ -81,6 +120,15 @@
                 <attr name="preferredID" stringvalue="MainTopComponent"/>
                 <attr
                     bundlevalue="edu.isocial.shade.shadecore.Bundle#CTL_MainAction" name="displayName"/>
+            </file>
+            <file name="edu-isocial-shade-shadecore-PropertiesTopComponent.instance">
+                <!--edu.isocial.shade.shadecore.PropertiesTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="edu.isocial.shade.shadecore.PropertiesTopComponent"/>
+                <attr name="preferredID" stringvalue="PropertiesTopComponent"/>
+                <attr
+                    bundlevalue="edu.isocial.shade.shadecore.Bundle#CTL_PropertiesAction" name="displayName"/>
             </file>
         </folder>
     </folder>

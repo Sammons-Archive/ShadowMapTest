@@ -22,7 +22,7 @@ import org.jdesktop.mtgame.WorldManager;
  */
 public class ShadowMapRenderBufferMaker {
 
-    private ShadowMapRenderBuffer shadow;
+    private static ShadowMapRenderBuffer shadow;
     private Vector3f dir, pos;
     private WorldManager worldManager;
 
@@ -67,7 +67,7 @@ public class ShadowMapRenderBufferMaker {
         //wm.addEntity(e);      
     }
 
-    public ShadowMapRenderBuffer getShadow() {
+    public static ShadowMapRenderBuffer getShadow() {
         return shadow;
     }
 }

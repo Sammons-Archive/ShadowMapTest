@@ -12,5 +12,6 @@
   </constraints>
   <bounds x="1440" y="614" width="288" height="351" />
   <frame state="0"/>
+    <active-tc  id="PropertiesTopComponent" />
     <empty-behavior permanent="true"/>
 </mode>

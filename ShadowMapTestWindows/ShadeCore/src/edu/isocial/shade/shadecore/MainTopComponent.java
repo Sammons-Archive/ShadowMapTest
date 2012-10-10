@@ -41,16 +41,14 @@ public final class MainTopComponent extends TopComponent implements RenderUpdate
     private WorldManager worldManager;
     private int width = 800;
     private int height = 600;
-    private float aspect = 800.0f / 600.0f;
-    private int gridWidth = 250;
     private ShadowMapRenderBuffer shadow;
-    private CanvasBuilder canvasBuilder = null;
-    private CameraBuilder cameraBuilder;
-    private GridBuilder gridBuilder;
-    private Axis axis;
-    private LightBuilder light;
-    private TeapotBuilder teapotBuilder;
-    private FloorBuilder floorBuilder;
+    private CanvasBuilder canvasBuilder;
+    private CameraEntityBuilder cameraBuilder;
+    private GridEntityBuilder gridBuilder;
+    private AxisEntityBuilder axisBuilder;
+    private LightNodeBuilder lightBuilder;
+    private ShapeEntityBuilder teapotBuilder;
+    private FloorEntityBuilder floorBuilder;
 
     public MainTopComponent() {
         initComponents();
@@ -103,7 +101,6 @@ public final class MainTopComponent extends TopComponent implements RenderUpdate
     private void construct() {
 
         new Thread(new Runnable() {
-
             @Override
             public void run() {
                 initialize();
@@ -115,65 +112,29 @@ public final class MainTopComponent extends TopComponent implements RenderUpdate
         worldManager = new WorldManager("TestWorld");
         worldManager.getRenderManager().setDesiredFrameRate(60);
 
-        canvasBuilder = new CanvasBuilder(worldManager, width, height);
-        canvasBuilder.buildCanvas(mainPane);
+        canvasBuilder = new CanvasBuilder();
+        canvasBuilder.buildCanvas(mainPane, worldManager);
 
-        cameraBuilder = new CameraBuilder(worldManager, aspect);
-        cameraBuilder.buildCamera(canvasBuilder);
+        cameraBuilder = new CameraEntityBuilder();
+        cameraBuilder.buildCamera(worldManager, canvasBuilder);
 
-        gridBuilder = new GridBuilder(worldManager, gridWidth);
-        worldManager.addEntity(gridBuilder.getGrid());
+        gridBuilder = new GridEntityBuilder();
+        gridBuilder.buildGrid(worldManager);
 
-        axis = new Axis(worldManager);
-        worldManager.addEntity(axis.getAxis());
+        axisBuilder = new AxisEntityBuilder();
+        axisBuilder.buildAxis(worldManager);
 
-        light = new LightBuilder(worldManager);
-        shadow = light.getShadow();
+        lightBuilder = new LightNodeBuilder();
+        lightBuilder.buildLight(worldManager);
+        shadow = lightBuilder.getShadow();
 
-        teapotBuilder = new TeapotBuilder(shadow, this);
-        teapotBuilder.buildTeapot(worldManager,0,0,0);
+        teapotBuilder = new ShapeEntityBuilder(shadow, this);
+        teapotBuilder.buildTeapot(worldManager, 0, 0, 0);
 
-        floorBuilder = new FloorBuilder();
+        floorBuilder = new FloorEntityBuilder();
         floorBuilder.createFloor(worldManager, shadow);
     }
 
-    public Axis getAxis() {
-        return axis;
-    }
-
-    public CameraBuilder getCameraBuilder() {
-        return cameraBuilder;
-    }
-
-    public CanvasBuilder getCanvasBuilder() {
-        return canvasBuilder;
-    }
-
-    public FloorBuilder getFloorBuilder() {
-        return floorBuilder;
-    }
-
-    public GridBuilder getGridBuilder() {
-        return gridBuilder;
-    }
-
-    public LightBuilder getLight() {
-        return light;
-    }
-
-    public JPanel getMainPane() {
-        return mainPane;
-    }
-
-    public TeapotBuilder getTeapotBuilder() {
-        return teapotBuilder;
-    }
-
-    public WorldManager getWorldManager() {
-        return worldManager;
-    }
-
-    
     
     @Override
     public void componentOpened() {

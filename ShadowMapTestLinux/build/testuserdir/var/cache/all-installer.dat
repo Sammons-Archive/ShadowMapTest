@@ -1,4 +1,4 @@
-#Tue Oct 02 16:30:14 CDT 2012
+#Tue Oct 09 16:55:32 CDT 2012
 org.netbeans.core.startup.OpenIDE-Module-Deprecated=\u0000
 org.netbeans.modules.settings.AutoUpdate-Show-In-Client=false
 org.netbeans.core.startup.OpenIDE-Module-Layer=org/netbeans/core/startup/layer.xml
@@ -97,12 +97,12 @@ org.netbeans.bootstrap.OpenIDE-Module-Description=\u0000
 org.netbeans.spi.quicksearch.OpenIDE-Module-Install=\u0000
 org.netbeans.core.OpenIDE-Module-Description=\u0000
 org.openide.nodes.OpenIDE-Module-Deprecated=\u0000
-org.netbeans.core.io.ui.AutoUpdate-Show-In-Client=false
 edu.isocial.shadowmap.jogl.OpenIDE-Module-Deprecated=\u0000
+org.netbeans.core.io.ui.AutoUpdate-Show-In-Client=false
 org.netbeans.modules.settings.OpenIDE-Module-Description=\u0000
 org.openide.filesystems.OpenIDE-Module-Install=\u0000
-org.netbeans.libs.junit4.AutoUpdate-Show-In-Client=false
 org.openide.windows.OpenIDE-Module-Deprecated=\u0000
+org.netbeans.libs.junit4.AutoUpdate-Show-In-Client=false
 org.netbeans.modules.masterfs.macosx.OpenIDE-Module-Hide-Classpath-Packages=\u0000
 org.openide.text.OpenIDE-Module-Hide-Classpath-Packages=\u0000
 org.netbeans.modules.sampler.OpenIDE-Module-Description=\u0000

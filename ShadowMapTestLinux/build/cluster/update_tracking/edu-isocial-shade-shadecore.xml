@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="edu.isocial.shade.shadecore">
-    <module_version install_time="1349213393605" last="true" origin="installer" specification_version="1.0">
+    <module_version install_time="1349819711599" last="true" origin="installer" specification_version="1.0">
         <file crc="1879398036" name="config/Modules/edu-isocial-shade-shadecore.xml"/>
-        <file crc="3137648740" name="modules/edu-isocial-shade-shadecore.jar"/>
+        <file crc="1944450946" name="modules/edu-isocial-shade-shadecore.jar"/>
     </module_version>
 </module>

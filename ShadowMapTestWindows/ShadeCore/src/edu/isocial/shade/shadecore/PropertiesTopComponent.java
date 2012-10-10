@@ -4,11 +4,28 @@
  */
 package edu.isocial.shade.shadecore;
 
+import com.jme.bounding.BoundingBox;
+import com.jme.math.Triangle;
+import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
+import com.jme.scene.Node;
+import com.jme.scene.Spatial;
+import com.jme.scene.shape.Teapot;
+import com.jme.scene.state.CullState;
+import com.jme.scene.state.MaterialState;
+import com.jme.scene.state.RenderState;
+import com.jme.scene.state.ZBufferState;
+import edu.isocial.shade.shadeCoreAPI.GenericBuilderImpl;
+import java.util.Collection;
 import javax.swing.JTextField;
+import org.jdesktop.mtgame.Entity;
+import org.jdesktop.mtgame.ProcessorComponent;
+import org.jdesktop.mtgame.RenderComponent;
+import org.jdesktop.mtgame.WorldManager;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
@@ -34,21 +51,20 @@ preferredID = "PropertiesTopComponent")
 })
 public final class PropertiesTopComponent extends TopComponent {
 
-        private ColorRGBA[] colors;
+    private ColorRGBA[] colors;
     private String[] colorStrings;
     private boolean axisOn = true;
     private boolean gridOn = true;
-    private boolean lightRotateOn = true;
+    private boolean lightRotation = true;
     private boolean rendering = true;
     private boolean spinOn = true;
 
-    
     public PropertiesTopComponent() {
         initComponents();
         setName(Bundle.CTL_PropertiesTopComponent());
         setToolTipText(Bundle.HINT_PropertiesTopComponent());
-        
-        
+
+        setupColors();
 
     }
 
@@ -62,7 +78,7 @@ public final class PropertiesTopComponent extends TopComponent {
 
         textLightZ = new javax.swing.JTextField();
         textLightY = new javax.swing.JTextField();
-        btnToggleSpin2 = new javax.swing.JButton();
+        btnToggleObjectSpin = new javax.swing.JButton();
         btnToggleCanvas = new javax.swing.JButton();
         textLightX = new javax.swing.JTextField();
         btnColor = new javax.swing.JButton();
@@ -71,15 +87,19 @@ public final class PropertiesTopComponent extends TopComponent {
         btnGridToggle = new javax.swing.JButton();
         comboColors = new javax.swing.JComboBox();
         btnToggleLightSpin = new javax.swing.JButton();
+        ObjectX = new javax.swing.JTextField();
+        ObjectY = new javax.swing.JTextField();
+        ObjectZ = new javax.swing.JTextField();
+        btnObjectLocation = new javax.swing.JButton();
 
         textLightZ.setText(org.openide.util.NbBundle.getMessage(PropertiesTopComponent.class, "PropertiesTopComponent.textLightZ.text")); // NOI18N
 
         textLightY.setText(org.openide.util.NbBundle.getMessage(PropertiesTopComponent.class, "PropertiesTopComponent.textLightY.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(btnToggleSpin2, org.openide.util.NbBundle.getMessage(PropertiesTopComponent.class, "PropertiesTopComponent.btnToggleSpin2.text")); // NOI18N
-        btnToggleSpin2.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(btnToggleObjectSpin, org.openide.util.NbBundle.getMessage(PropertiesTopComponent.class, "PropertiesTopComponent.btnToggleObjectSpin.text")); // NOI18N
+        btnToggleObjectSpin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnToggleSpin2ActionPerformed(evt);
+                btnToggleObjectSpinActionPerformed(evt);
             }
         });
 
@@ -127,28 +147,51 @@ public final class PropertiesTopComponent extends TopComponent {
             }
         });
 
+        ObjectX.setText(org.openide.util.NbBundle.getMessage(PropertiesTopComponent.class, "PropertiesTopComponent.ObjectX.text")); // NOI18N
+
+        ObjectY.setText(org.openide.util.NbBundle.getMessage(PropertiesTopComponent.class, "PropertiesTopComponent.ObjectY.text")); // NOI18N
+
+        ObjectZ.setText(org.openide.util.NbBundle.getMessage(PropertiesTopComponent.class, "PropertiesTopComponent.ObjectZ.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(btnObjectLocation, org.openide.util.NbBundle.getMessage(PropertiesTopComponent.class, "PropertiesTopComponent.btnObjectLocation.text")); // NOI18N
+        btnObjectLocation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnObjectLocationActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnToggleCanvas)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(btnGridToggle)
-                .addGap(6, 6, 6)
-                .addComponent(btnAxisToggle))
-            .addComponent(btnToggleSpin2)
-            .addComponent(btnColor)
-            .addComponent(comboColors, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(btnUpdateLight)
-                .addGap(6, 6, 6)
-                .addComponent(btnToggleLightSpin))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(textLightX, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
-                .addComponent(textLightY, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
-                .addComponent(textLightZ, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnToggleCanvas)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnGridToggle)
+                        .addGap(6, 6, 6)
+                        .addComponent(btnAxisToggle))
+                    .addComponent(btnToggleObjectSpin)
+                    .addComponent(btnColor)
+                    .addComponent(comboColors, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(textLightX, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(textLightY, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(textLightZ, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnUpdateLight)
+                        .addGap(6, 6, 6)
+                        .addComponent(btnToggleLightSpin))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(ObjectX, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ObjectY, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ObjectZ, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnObjectLocation))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -159,10 +202,17 @@ public final class PropertiesTopComponent extends TopComponent {
                     .addComponent(btnGridToggle)
                     .addComponent(btnAxisToggle))
                 .addGap(6, 6, 6)
-                .addComponent(btnToggleSpin2)
+                .addComponent(btnToggleObjectSpin)
                 .addGap(6, 6, 6)
                 .addComponent(btnColor)
-                .addGap(10, 10, 10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addComponent(btnObjectLocation)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ObjectX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ObjectY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ObjectZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
                 .addComponent(comboColors, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,58 +222,102 @@ public final class PropertiesTopComponent extends TopComponent {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(textLightX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(textLightY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textLightZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(textLightZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnToggleSpin2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnToggleSpin2ActionPerformed
-
-   }//GEN-LAST:event_btnToggleSpin2ActionPerformed
+    private void btnToggleObjectSpinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnToggleObjectSpinActionPerformed
+   }//GEN-LAST:event_btnToggleObjectSpinActionPerformed
 
     private void btnToggleCanvasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnToggleCanvasActionPerformed
-        if (rendering) {
-            rendering = false;
-        } else {
-            rendering = true;
-        }
-         //.getWorldManager().getRenderManager().setRunning(rendering);
+
     }//GEN-LAST:event_btnToggleCanvasActionPerformed
 
     private void btnColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColorActionPerformed
+        for (int i = 0; i < WorldManager.getDefaultWorldManager().numEntities(); i++) {
+            if (WorldManager.getDefaultWorldManager().getEntity(i).getName().contains("eapot")) {
+                Node newNode = generateNode(
+                        WorldManager.getDefaultWorldManager().getEntity(i).getComponent(RenderComponent.class).getSceneRoot().getLocalTranslation().getX(),
+                        WorldManager.getDefaultWorldManager().getEntity(i).getComponent(RenderComponent.class).getSceneRoot().getLocalTranslation().getY(),
+                        WorldManager.getDefaultWorldManager().getEntity(i).getComponent(RenderComponent.class).getSceneRoot().getLocalTranslation().getZ(),
+                        colors[comboColors.getSelectedIndex()]);
 
+                WorldManager.getDefaultWorldManager().getEntity(i).getComponent(RenderComponent.class).setSceneRoot(newNode);
+
+            }
+        }
    }//GEN-LAST:event_btnColorActionPerformed
 
     private void btnAxisToggleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAxisToggleActionPerformed
-
+        Collection<? extends GenericBuilderImpl> allBuilders = Lookup.getDefault().lookupAll(GenericBuilderImpl.class);
+        if (rendering) {
+            rendering = false;
+            for (GenericBuilderImpl builder : allBuilders) {
+                if (builder.getMyEntity().getName().contains("rid")) {
+                    WorldManager.getDefaultWorldManager().removeEntity(builder.getMyEntity());
+                }
+            }
+        } else {
+            rendering = true;
+            for (GenericBuilderImpl builder : allBuilders) {
+                if (builder.getMyEntity().getName().contains("rid")) {
+                    WorldManager.getDefaultWorldManager().addEntity(builder.getMyEntity());
+                }
+            }
+        }
    }//GEN-LAST:event_btnAxisToggleActionPerformed
 
     private void btnUpdateLightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateLightActionPerformed
-
    }//GEN-LAST:event_btnUpdateLightActionPerformed
 
     private void btnGridToggleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGridToggleActionPerformed
+        if (gridOn) {
+            gridOn = false;
 
+        } else {
+            gridOn = true;
+        }
+        WorldManager.getDefaultWorldManager().getRenderManager().setRunning(rendering);
    }//GEN-LAST:event_btnGridToggleActionPerformed
 
     private void btnToggleLightSpinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnToggleLightSpinActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnToggleLightSpinActionPerformed
 
+    private void btnObjectLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObjectLocationActionPerformed
+
+        for (int i = 0; i < WorldManager.getDefaultWorldManager().numEntities(); i++) {
+            if (WorldManager.getDefaultWorldManager().getEntity(i).getName().contains("eapot")) {
+                if (verifyInputs(ObjectX, ObjectY, ObjectZ)) {
+//for some reason the method setting local translation requires the sceneroot to be set to itself to update (line 279) before updating
+                    WorldManager.getDefaultWorldManager().getEntity(i).getComponent(RenderComponent.class).getSceneRoot().setLocalTranslation(
+                            Float.valueOf(ObjectX.getText()),
+                            Float.valueOf(ObjectY.getText()),
+                            Float.valueOf(ObjectZ.getText()));
+                    WorldManager.getDefaultWorldManager().getEntity(i).getComponent(RenderComponent.class).setSceneRoot(WorldManager.getDefaultWorldManager().getEntity(i).getComponent(RenderComponent.class).getSceneRoot());
+                }
+            }
+        }
+    }//GEN-LAST:event_btnObjectLocationActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField ObjectX;
+    private javax.swing.JTextField ObjectY;
+    private javax.swing.JTextField ObjectZ;
     private javax.swing.JButton btnAxisToggle;
     private javax.swing.JButton btnColor;
     private javax.swing.JButton btnGridToggle;
+    private javax.swing.JButton btnObjectLocation;
     private javax.swing.JButton btnToggleCanvas;
     private javax.swing.JButton btnToggleLightSpin;
-    private javax.swing.JButton btnToggleSpin;
-    private javax.swing.JButton btnToggleSpin1;
-    private javax.swing.JButton btnToggleSpin2;
+    private javax.swing.JButton btnToggleObjectSpin;
     private javax.swing.JButton btnUpdateLight;
     private javax.swing.JComboBox comboColors;
     private javax.swing.JTextField textLightX;
     private javax.swing.JTextField textLightY;
     private javax.swing.JTextField textLightZ;
     // End of variables declaration//GEN-END:variables
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -234,8 +328,37 @@ public final class PropertiesTopComponent extends TopComponent {
         // TODO add custom code on component closing
     }
 
-    
-        private void setupColors() {
+    private Node generateNode(float x, float y, float z, ColorRGBA color) {
+        Node newNode = new Node();
+        MaterialState materialState;
+        Teapot teapot = new Teapot();
+        teapot.updateGeometryData();
+        newNode.attachChild(teapot);
+        newNode.setLocalScale(3.0f);
+
+        //make the teapot a specific color
+        if (color != null) {
+            materialState = (MaterialState) WorldManager.getDefaultWorldManager().getRenderManager().createRendererState(RenderState.StateType.Material);
+            materialState.setDiffuse(color);
+        } else {
+            materialState = (MaterialState) WorldManager.getDefaultWorldManager().getRenderManager().createRendererState(RenderState.StateType.Material);
+            materialState.setDiffuse(new ColorRGBA());
+        }
+        //add rest of renderStates
+        ZBufferState buf = (ZBufferState) WorldManager.getDefaultWorldManager().getRenderManager().createRendererState(RenderState.StateType.ZBuffer);
+        buf.setEnabled(true);
+        buf.setFunction(ZBufferState.TestFunction.LessThanOrEqualTo);
+
+        //note removed some cull state settings here as well as some bounding box calculations, since they did not seem to affect things
+
+        newNode.setRenderState(materialState);
+        newNode.setRenderState(buf);
+        newNode.setLocalTranslation(x, y, z);
+
+        return newNode;
+    }
+
+    private void setupColors() {
         colors = new ColorRGBA[9];
         colors[0] = new ColorRGBA();
         colors[1] = ColorRGBA.black;
@@ -274,7 +397,7 @@ public final class PropertiesTopComponent extends TopComponent {
         }
         return true;
     }
-    
+
     void writeProperties(java.util.Properties p) {
         // better to version settings since initial version as advocated at
         // http://wiki.apidesign.org/wiki/PropertyFiles
